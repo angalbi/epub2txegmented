@@ -7,8 +7,6 @@ Additionally, the option to make a sentece segmentation of the extracted informa
 
 ## Let's start 🚀
 
-_Apart from the code, a small free epub books directory is provided to make the first tries._
-
 
 
 ### Requirements 📋
