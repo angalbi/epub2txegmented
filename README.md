@@ -49,7 +49,7 @@ _The specified directory could contain other type of file, the script will only 
 python main.py -i /path/to/epub_directory 
 ```
 
-## Make sentece segmentation :page_facing_up: 
+### Make sentece segmentation :page_facing_up: 
 
 _We can format the extracted information and make a sentece segmentation. Just add -s argument._
 
