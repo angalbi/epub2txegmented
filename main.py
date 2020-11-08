@@ -1,4 +1,5 @@
-import os,sys,shutil
+import getopt
+import os, shutil
 from glob import glob
 import sys
 import epub2txt as ep
@@ -45,63 +46,89 @@ def sentece_segmentation():
             '{}/{}\t{}\t{}\n'.format(i, len(file_list), n_sent, file_path))
 
 # Function to extract info from epub files and store as plain text in txt files.
-def epub2txt(path):
-    # Initialize the book and error counters
+def epub2txt(path,seg,output=DEST_DIR):
+
     book_num = 0
     err_num = 0
-    
-    # Complete destination directory path
-    dest_path = os.getcwd()+"/"+DEST_DIR
+
+    dest_path = os.getcwd()+"/" + output
 
     # If the directory already exists, OVERWRITE
     if os.path.isdir(dest_path):
         shutil.rmtree(dest_path)
         os.mkdir(dest_path)
     else:
-        os.mkdir(os.getcwd() + "/" + DEST_DIR)
+        os.mkdir(dest_path)
 
     #Check if we are parsing a file or a hole directory
     if os.path.isfile(os.getcwd()+"/"+path):
-        # Transformation process for a single file
         print("Processing %s ..." % path, end=" ")
         try:
-            ep.convert(os.getcwd()+"/"+path,os.getcwd() + "/" + DEST_DIR)
+            ep.convert(os.getcwd()+"/"+path,os.getcwd() + "/" + output)
             print("OK")
         except:
             print("ERROR : %s " % path)
-    else:
+    elif os.path.exists(os.getcwd()+"/"+path):
         # Transformation process for a hole directory
         # Find every file in epub format
         for root, dirname, files in os.walk(path):
             for f in files:
                 if f.endswith('.epub'):
                     print("Processing %s ..." % f, end = " ")
-                    # Error control
                     try:
-                        ep.convert(os.path.join(root, f),os.getcwd() + "/" + DEST_DIR)
+                        ep.convert(os.path.join(root, f),os.getcwd() + "/" + output)
                         book_num += 1
                         print("OK")
                     except (KeyError, IOError):
                         print("ERROR : %s " % f)
                         err_num += 1
+    else:
+        print("This directory does not exist.")
+        exit(0)
 
-        print("\n\n|**   Books converted in txt: %d  ERRORS: %d   **|" % (book_num, err_num))
-        
+        if seg:
+            print("\n\n|**   CONVERTED: %d  SEGMENTED: %d  ERRORS: %d   **|" % (book_num, book_num, err_num))
+        else:
+            print("\n\n|**   CONVERTED: %d   ERRORS: %d   **|" % (book_num, err_num))
+
+
 def usage():
-    print("USAGE: python epub_txegmented.py <epub_dir_path> | <epub_file_path>")
+    print("ERROR: bad usage")
+    print("python epub_txegmented.py -i [<epub_dir_path> | <epub_file_path>] / -s / -o [output_dir]")
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
+def main(argv):
+    output = DEST_DIR
+    segmentation = False
+    input = ''
+    try:
+        opts, args = getopt.getopt(argv, "hi:so:", ["help", "input", "segmentation", "output"])
+    except getopt.GetoptError:
+        usage()
+        sys.exit(0)
+    for opt, arg in opts:
+        if opt in ('-h','--help'):
+            usage()
+            sys.exit(0)
+        elif opt in ('-i','--input'):
+            input = arg
+        elif opt in ('-s','--segmentation'):
+            segmentation = True
+        elif opt in ('-o','--output-dir'):
+            output = arg
+    if input == '':
         usage()
         exit(0)
-    path = sys.argv[1]
-    # A folder will be created with the files containing the extracted information
-    epub2txt(path)
-    # This function will make the segmentation of all the files in DEST_DIR and overwrite the files
-    sentece_segmentation()
+
+    try:
+        epub2txt(input, segmentation, output)
+    except FileNotFoundError:
+        print("This file or directory does not exist.")
+    if segmentation:
+        sentece_segmentation()
 
 
 
-
+if __name__ == "__main__":
+    main(sys.argv[1:])
 
 
