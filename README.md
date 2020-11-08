@@ -43,7 +43,7 @@ _All the result of the function will be stored in a directory. This directory co
 ### Extracting a single epub file information 📖
 
 ```
-python epub2txegmented.py -i /path/to/book.epub -o Output_direcory
+python main.py -i /path/to/book.epub -o Output_direcory
 ```
 
 ### Extracting information from epub books directories :file_folder:📖
