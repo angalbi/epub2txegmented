@@ -1,9 +1,9 @@
 # epub2txegmented
 This script aims to extract the information of epub format files and represent it as plain text, prodiving an eassy usage and structure.
 
-Both directories and files could be treated; in directories case, the script will find all the .epub files in the specified directory in order to process them. Otherwise, single file also are accepted. All the information will be stored in a destination directory.
+Both directories and files could be treated with this script; in directories case, the script will find all the .epub files in the specified directory in order to process them. Otherwise, single files also are accepted. All the information will be stored in a destination directory.
 
-Additionally, it contains the option to make a sentece segmentation of the extracted information. The functionality will read all the plain text files from the output directory and overwrite them with the segmentation structure.
+Additionally, the option to make a sentece segmentation of the extracted information is algo given. All the plain text files will be read from the output directory and overwrite them with the segmentation structure.
 
 ## Let's start 🚀
 
@@ -29,6 +29,11 @@ Installing requierements:
 
 ```
 pip install -r requirements.txt
+```
+
+Get the code downloading the ZIP file or cloning the proyect:
+```
+git clone https://github.com/angalbi/epub2txegmented.git
 ```
 
 ## Usage ⚙️
